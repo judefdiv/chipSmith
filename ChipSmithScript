@@ -1,0 +1,14 @@
+#!/bin/bash
+
+clear
+
+echo "------------- Script to for chipSmith ---------------"
+
+cd build
+cmake .. && \
+make && \
+cd ../
+
+./build/chipSmith -c ./config.toml
+
+echo "------------------ Script ended -------------------"

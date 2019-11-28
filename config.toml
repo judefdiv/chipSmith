@@ -1,0 +1,37 @@
+# Author:  		 Jude de Villiers
+# Origin:  		 E&E Engineering - Stellenbosch University
+# For:				 Supertools, Coldflux Project - IARPA
+# Created: 		 2019-11-27
+# Modified:
+# license:
+# Description: Configuration file for defining stuffs
+# File:				 config.toml
+
+[CONFIG]
+	LEFfile = "data/LEFDEFSUN/lef_2_metals.lef"
+	DEFfile = "data/LEFDEFSUN/KSA4_route.def"
+	GDSfile = "data/outputGDS.gds"
+
+# The file locations of the GDS cell library
+[GDS_CELL_LOCATIONS]
+	LSmitll_AND2T  = 	"data/LSMITLL/LSmitll_AND2T.gds"
+	LSmitll_MERGET = 	"data/LSMITLL/LSmitll_MERGET.gds"
+	LSmitll_OR2T   = 	"data/LSMITLL/LSmitll_OR2T.gds"
+	LSmitll_DFFT   = 	"data/LSMITLL/LSmitll_DFFT.gds"
+	LSmitll_NDROT  = 	"data/LSMITLL/LSmitll_NDROT.gds"
+	LSmitll_SPLITT = 	"data/LSMITLL/LSmitll_SPLITT.gds"
+	LSmitll_jtlt   = 	"data/LSMITLL/LSmitll_jtlt.gds"
+	LSmitll_NOTT   = 	"data/LSMITLL/LSmitll_NOTT.gds"
+	LSmitll_XORT   = 	"data/LSMITLL/LSmitll_XORT.gds"
+
+# The name of the GDS structure of which the gate type belongs to
+[GDS_MAIN_STR_NAME]
+	NOTT      = "LSmitll_NOTT"
+	DFFT      = "LSmitll_DFFT"
+	JTLT      = "LSmitll_jtlt"
+	SPLITT    = "LSmitll_SPLITT"
+	MERGET    = "LSmitll_MERGET"
+	AND2T     = "LSmitll_AND2T"
+	XOR2T     = "LSmitll_XORT"
+	OR2T      = "LSmitll_OR2T"
+	NDRO      = "LSmitll_NDROT"
