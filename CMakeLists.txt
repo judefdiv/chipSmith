@@ -7,6 +7,8 @@ set(SOURCES
   src/chipsmith/toolFlow.cpp
   src/chipsmith/genFunc.cpp
   src/chipsmith/ParserLef.cpp
+  src/chipsmith/ParserDef.cpp
+  src/chipsmith/chipForge.cpp
 
   # GDScpp library
   src/gdscpp/gdsCpp.cpp

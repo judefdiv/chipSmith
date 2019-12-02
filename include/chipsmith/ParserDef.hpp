@@ -22,8 +22,8 @@ class def_net;
 #include <iomanip>
 #include <set>
 #include <ctime>
-#include "viper/genFunc.hpp"
-#include "viper/ParserBlif.hpp"
+#include "chipsmith/genFunc.hpp"
+// #include "chipsmith/ParserBlif.hpp"
 
 using namespace std;
 
@@ -42,10 +42,6 @@ class def_file{
 
 		int DIEAREA[4] = {0};
 
-		vector<def_component> comps;
-		vector<def_net> nets;
-		vector<def_net> snets;
-
 		set<string> validOHWords = {"DESIGN", "UNITS", "DIEAREA", "ROW", "TRACKS", "GCELLGRID"};
 		set<string> validNBlkWords = {"COMPONENTS", "SPECIALNETS", "NETS"};
 
@@ -54,9 +50,14 @@ class def_file{
 	public:
 		def_file(){};
 		~def_file(){};
+
+		vector<def_component> comps;
+		vector<def_net> nets;
+		vector<def_net> snets;
+
 		int importFile(const string &fileName);
-		int importNodesNets(vector<BlifNode> inNodes,
-                       vector<BlifNet> inNets);
+		// int importNodesNets(vector<BlifNode> inNodes,
+  //                      vector<BlifNet> inNets);
 		vector<def_component> getComps(){return this->comps;};
 		vector<def_net> getNets(){return this->nets;};
 
@@ -90,10 +91,10 @@ class def_component{
 
 		int createAuto(vector<string> &inLine);
 
-		string get_varName(){return name;}
-		string get_varCompName(){return compName;}
-		int get_varCorX(){return corX;}
-		int get_varCorY(){return corY;}
+		string getName(){return name;}
+		string getCompType(){return compName;}
+		int getCorX(){return corX;}
+		int getCorY(){return corY;}
 		string to_def(){
 			string newType;
 			if(!compName.compare("input") || !compName.compare("output")){

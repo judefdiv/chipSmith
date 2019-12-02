@@ -41,10 +41,6 @@ class lef_file;
 
 class lef_file{
 	private:
-		vector<lef_macro> macros;
-		vector<lef_layer> layers;
-		vector<lef_via> vias;
-
     set<string> validOthWords = {"NAMESCASESENSITIVE", "LIBRARY", "END", "UNITS", "LAYER", "MACRO", "VIA", "OBS", "SPACING", "SITE"};
     set<string> blkEndWithName = {"LAYER", "MACRO", "VIA", "SITE"};
     set<string> blkEndWithType = {"UNITS", "OBS", "SPACING"};
@@ -55,6 +51,10 @@ class lef_file{
 	public:
 		lef_file(){};
 		~lef_file(){};
+
+    vector<lef_macro> macros;
+    vector<lef_layer> layers;
+    vector<lef_via> vias;
 
 		int importFile(const string &fileName);
 		int importGDF(const string &fileName);
@@ -101,10 +101,10 @@ class lef_macro{
 		vector<macro_port> obs;
 
 		string get_varName(){return name;}
-		double get_varSIZEX(){return sizeX;}
-		double get_varSIZEY(){return sizeY;}
-		double get_varORIGINX(){return originX;}
-		double get_varORIGINY(){return originY;}
+		double getSizeX(){return sizeX;}
+		double getSizeY(){return sizeY;}
+		double getOriginX(){return originX;}
+		double getOriginY(){return originY;}
 		void get_varPIN(vector<macro_pin> &VecOut){VecOut = pins;};
 		int get_noPIN(){return pins.size();}
 		void to_str();

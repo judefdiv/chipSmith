@@ -68,7 +68,6 @@ int def_file::importFile(const string &fileName){
 	while(1){
 		lineVec = splitFileLine(defFile);
 		keyword = lineVec[0];
-		// disVector(lineVec);
 
 		if(this->validNBlkWords.find(keyword) != this->validNBlkWords.end()){
 			if(keyword == "COMPONENTS"){
@@ -104,36 +103,40 @@ int def_file::importFile(const string &fileName){
 				}
 			}
 			else if(keyword == "SPECIALNETS"){
-				cout << "Processing special nets..." << endl;
-				this->snets.resize(stoi(lineVec[1]));
+				cout << "Skipping special nets..." << endl;
+				// this->snets.resize(stoi(lineVec[1]));
 
-				unsigned int snetIndex = 0;
-				lineVec = splitFileLine(defFile);
+				// unsigned int snetIndex = 0;
+				// lineVec = splitFileLine(defFile);
 
-				while(lineVec[0] != "END" && lineVec[1] != "SPECIALNETS"){
-					while(lineVec[lineVec.size()-1] != ";"){
-						strBlock.push_back(lineVec);
-						lineVec = splitFileLine(defFile);
-					}
-					strBlock.push_back(lineVec);
+				// while(lineVec[0] != "END" && lineVec[1] != "SPECIALNETS"){
+        while(lineVec[0] != "END"){
+          lineVec = splitFileLine(defFile);
 
-					// disVectorBlk(strBlock);
-					this->snets[snetIndex++].createAutoSpecial(strBlock);
+					// while(lineVec[lineVec.size()-1] != ";"){
+					// 	strBlock.push_back(lineVec);
+					// 	lineVec = splitFileLine(defFile);
+					// }
+					// strBlock.push_back(lineVec);
 
-					strBlock.clear();
-					lineVec = splitFileLine(defFile);
+					// // disVectorBlk(strBlock);
+					// this->snets[snetIndex++].createAutoSpecial(strBlock);
+
+					// strBlock.clear();
+					// lineVec = splitFileLine(defFile);
 				}
+        cout << "Special nets, done." << endl;
 			}
 			else{
 				cout << "Check for smoke." << endl;
 			}
 		}
 		else if(validOHWords.find(keyword) != validOHWords.end()){
-			if(!proOH){
-				cout << "Processing overheads..." << endl;
-				proOH = true;
-			}
-			this->createAuto(lineVec);
+			// if(!proOH){
+			// 	cout << "Processing overheads..." << endl;
+			// 	proOH = true;
+			// }
+			// this->createAuto(lineVec);
 		}
 		else if(lineVec[0] == "END" && lineVec[1] == "DESIGN"){
 			cout << "Importing DEF file done." << endl;
@@ -141,6 +144,7 @@ int def_file::importFile(const string &fileName){
 		}
 		else{
 			cout << "Unknown word." << endl;
+      disVector(lineVec);
 			return 0;
 		}
 	}
@@ -157,107 +161,78 @@ int def_file::importFile(const string &fileName){
  * @return         [1 - All good, 0 - Error]
  */
 
-int def_file::importNodesNets(vector<BlifNode> inNodes, vector<BlifNet> inNets){
+// int def_file::importNodesNets(vector<BlifNode> inNodes, vector<BlifNet> inNets){
 
-  cout << "Converting nodes and net into DEF format" << endl;
+//   cout << "Converting nodes and net into DEF format" << endl;
 
-	this->comps.clear();
-	this->nets.clear();
-	this->snets.clear();
+// 	this->comps.clear();
+// 	this->nets.clear();
+// 	this->snets.clear();
 
-  vector<unsigned int> nodesOutputCnt, nodesInputCnt;
-  nodesOutputCnt.resize(inNodes.size());
-  nodesInputCnt.resize(inNodes.size());
+//   vector<unsigned int> nodesOutputCnt, nodesInputCnt;
+//   nodesOutputCnt.resize(inNodes.size());
+//   nodesInputCnt.resize(inNodes.size());
 
-  cout << "Processing nodes." << endl;
+//   cout << "Processing nodes." << endl;
 
-	for(auto &itNodes: inNodes){
-		def_component tempComp;
-		tempComp.name = itNodes.name;
-		tempComp.compName = itNodes.GateType;
-		tempComp.corX = itNodes.corX;
-		tempComp.corY = itNodes.corY;
-		this->comps.push_back(tempComp);
-	}
+// 	for(auto &itNodes: inNodes){
+// 		def_component tempComp;
+// 		tempComp.name = itNodes.name;
+// 		tempComp.compName = itNodes.GateType;
+// 		tempComp.corX = itNodes.corX;
+// 		tempComp.corY = itNodes.corY;
+// 		this->comps.push_back(tempComp);
+// 	}
 
-  cout << "Processing nets." << endl;
+//   cout << "Processing nets." << endl;
 
-  for(unsigned int i = 0; i < inNets.size(); i++){
-    if(inNets[i].outNodes.size() == 0 || inNets[i].inNodes.size() == 0){
-      continue;
-    }
-	// for(auto &itNets: inNets){
-		def_net tempNet;
-    unsigned int toComp, fromComp;
-		string toCompType, fromComType;
+//   for(unsigned int i = 0; i < inNets.size(); i++){
+//     if(inNets[i].outNodes.size() == 0 || inNets[i].inNodes.size() == 0){
+//       continue;
+//     }
+// 	// for(auto &itNets: inNets){
+// 		def_net tempNet;
+//     unsigned int toComp, fromComp;
+// 		string toCompType, fromComType;
 
-    tempNet.name = inNets[i].name;
+//     tempNet.name = inNets[i].name;
 
-    fromComp = inNets[i].inNodes[0];
-    fromComType = inNodes[fromComp].GateType;
-    tempNet.fromComp = inNodes[fromComp].name;
+//     fromComp = inNets[i].inNodes[0];
+//     fromComType = inNodes[fromComp].GateType;
+//     tempNet.fromComp = inNodes[fromComp].name;
 
-    toComp = inNets[i].outNodes[0];
-    toCompType = inNodes[toComp].GateType;
-    tempNet.ToComp = inNodes[toComp].name;
+//     toComp = inNets[i].outNodes[0];
+//     toCompType = inNodes[toComp].GateType;
+//     tempNet.ToComp = inNodes[toComp].name;
 
-		// from/ output
-		if(!fromComType.compare("PAD")){
-			tempNet.fromPin = "INOUT_1";
-		}
-		else{
-      nodesOutputCnt[fromComp]++;
-			tempNet.fromPin = "OUT_" + to_string(nodesOutputCnt[fromComp]);
-		}
+// 		// from/ output
+// 		if(!fromComType.compare("PAD")){
+// 			tempNet.fromPin = "INOUT_1";
+// 		}
+// 		else{
+//       nodesOutputCnt[fromComp]++;
+// 			tempNet.fromPin = "OUT_" + to_string(nodesOutputCnt[fromComp]);
+// 		}
 
-		// to/ input
-		if(!toCompType.compare("PAD")){
-			tempNet.ToPin = "INOUT_1";
-		}
-		else if(inNodes[toComp].clkNet == i){
-      tempNet.ToPin = "CLK";
-		}
-		else{
-      nodesInputCnt[toComp]++;
-			tempNet.ToPin = "IN_" + to_string(nodesInputCnt[toComp]);
-		}
+// 		// to/ input
+// 		if(!toCompType.compare("PAD")){
+// 			tempNet.ToPin = "INOUT_1";
+// 		}
+// 		else if(inNodes[toComp].clkNet == i){
+//       tempNet.ToPin = "CLK";
+// 		}
+// 		else{
+//       nodesInputCnt[toComp]++;
+// 			tempNet.ToPin = "IN_" + to_string(nodesInputCnt[toComp]);
+// 		}
 
-    this->nets.push_back(tempNet);
+//     this->nets.push_back(tempNet);
 
+// 	}
 
-      // fromNode = this->nets[i].inNodes[0];
-      // toNode = this->nets[i].outNodes[j];
-
-      // if(this->nodes[fromNode].strRef == this->pad_index){
-      //   corX[0] = this->nodes[fromNode].corX + this->gateList[this->nodes[fromNode].strRef].pins_in_out_x[0];
-      //   corY[0] = this->nodes[fromNode].corY + this->gateList[this->nodes[fromNode].strRef].pins_in_out_y[0];
-      // }
-      // else{
-      //   corX[0] = this->nodes[fromNode].corX + this->gateList[this->nodes[fromNode].strRef].pins_out_x[nodesOutputCnt[fromNode]];
-      //   corY[0] = this->nodes[fromNode].corY + this->gateList[this->nodes[fromNode].strRef].pins_out_y[nodesOutputCnt[fromNode]];
-      //   nodesOutputCnt[fromNode]++;
-      // }
-
-      // // check if toNode is connecting with CLK
-      // if(this->nodes[toNode].clkNet == i){        // check if toNode is connecting with CLK
-      //   corX[1] = this->nodes[toNode].corX + this->gateList[this->nodes[toNode].strRef].clk_x[0];
-      //   corY[1] = this->nodes[toNode].corY + this->gateList[this->nodes[toNode].strRef].clk_y[0];
-      // }
-      // else if(this->nodes[toNode].strRef == this->pad_index){
-      //   corX[1] = this->nodes[toNode].corX + this->gateList[this->nodes[toNode].strRef].pins_in_out_x[0];
-      //   corY[1] = this->nodes[toNode].corY + this->gateList[this->nodes[toNode].strRef].pins_in_out_y[0];
-      // }
-      // else{
-      //   corX[1] = this->nodes[toNode].corX + this->gateList[this->nodes[toNode].strRef].pins_in_x[nodesInputCnt[toNode]];
-      //   corY[1] = this->nodes[toNode].corY + this->gateList[this->nodes[toNode].strRef].pins_in_y[nodesInputCnt[toNode]];
-      //   nodesInputCnt[toNode]++;
-      // }
-
-	}
-
-  cout << "Converting nodes and net into DEF format, done." << endl;
-	return 1;
-}
+//   cout << "Converting nodes and net into DEF format, done." << endl;
+// 	return 1;
+// }
 
 // vector<string> splitFileLine(ifstream &inFile){
 // 	string lineIn;
@@ -459,7 +434,7 @@ void def_component::to_str(){
 	cout << "\tComponent: " << this->compName << endl;
 	cout << "\tPosition type: " << this->posType << endl;
 	cout << "\tPosition(x,y): " << this->corX << "  " << this->corY << endl;
-	cout << "\t Orientation: " << this->orient << endl;
+	cout << "\tOrientation: " << this->orient << endl;
 }
 
 /**

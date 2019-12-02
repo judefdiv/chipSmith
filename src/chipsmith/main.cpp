@@ -163,7 +163,7 @@ int RunToolFromConfig(string fileName){
 		// lefFName = lefFName.insert(0, workDir);
 	}
 
-		it_run_para = run_para.find("LEFfile");
+		it_run_para = run_para.find("DEFfile");
 	if(it_run_para != run_para.end()){
 		defFName = it_run_para->second;
 		// lefFName = lefFName.insert(0, workDir);
@@ -171,7 +171,7 @@ int RunToolFromConfig(string fileName){
 
 	if(!command.compare("g")){
 		if(defFName.compare("\0") && gdsFName.compare("\0") && lefFName.compare("\0")){
-			forgeChip(lefFName, defFName, gdsFName);
+			forgeChip(lefFName, defFName, gdsFName, configFile);
 			return 0;
 		}
 		else{

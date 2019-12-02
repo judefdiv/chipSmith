@@ -13,9 +13,12 @@
 #include <iostream>
 
 #include "chipsmith/ParserLef.hpp"
+#include "chipsmith/ParserDef.hpp"
+#include "chipsmith/chipForge.hpp"
 
 using namespace std;
 
 int forgeChip(const string &lefFileName,
               const string &defFileName,
-              const string &gdsFileName);
+              const string &gdsFileName,
+              const string &conFileName);

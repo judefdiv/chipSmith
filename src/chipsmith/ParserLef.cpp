@@ -50,7 +50,7 @@ int lef_file::importFile(const string &fileName){
           break;
       }
 
-      disVectorBlk(strBlock);
+      // disVectorBlk(strBlock);
 
       if(keyword == "MACRO"){
         lef_macro cl_macro_Temp;
@@ -438,7 +438,7 @@ int lef_macro::autoCreate(vector<vector<string> > &inBlock){
           break;
       }
 
-      disVectorBlk(subBlock);
+      // disVectorBlk(subBlock);
 
       int j = 0;
       while(j < subBlock.size()){
