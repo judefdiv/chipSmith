@@ -41,9 +41,26 @@ class forgedChip{
 
     map<string, string> gdsFileLoc;
     map<string, string> lef2gdsNames;
+    map<string, string> gdsFillFileLoc;
+
+    map<string, vector<int>> cellSize;
+    vector<vector<vector<bool>>> grid;
+    // grid[0] - All; grid[n] - Mn;
+
+    int gridOffsetX = 0;
+    int gridOffsetY = 0;
+    int gridSizeX = 0;
+    int gridSizeY = 0;
+
+
+    vector<int> fillCor;
+    unsigned int gridSize = 0;
 
     int importGates();
+    int importFill();
     int placeGates();
+    int placeNets();
+    int placeFill();
 
   public:
     forgedChip(){};

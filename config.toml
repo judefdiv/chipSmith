@@ -12,6 +12,21 @@
 	DEFfile = "data/LEFDEFSUN/KSA4_route.def"
 	GDSfile = "data/outputGDS.gds"
 
+[PARAMETERS]
+	fillCor = [55, 55, 1045, 1805]
+	gridSize = 10
+
+[GDS_LOCATIONS]
+	fillAll = "data/GDSfill/fillAll.gds"
+	fillM1 = "data/GDSfill/fillM1.gds"
+	fillM2 = "data/GDSfill/fillM2.gds"
+	fillM3 = "data/GDSfill/fillM3.gds"
+	fillM4 = "data/GDSfill/fillM4.gds"
+	# fillM5 = "data/GDSfill/fillM5.gds"
+	fillM6 = "data/GDSfill/fillM6.gds"
+	ViaM1M3 = "data/GDSfill/ViaM1M3.gds"
+
+
 # The file locations of the GDS cell library
 [GDS_CELL_LOCATIONS]
 	LSmitll_AND2T  = 	"data/LSMITLL/LSmitll_AND2T.gds"
@@ -23,6 +38,27 @@
 	LSmitll_jtlt   = 	"data/LSMITLL/LSmitll_jtlt.gds"
 	LSmitll_NOTT   = 	"data/LSMITLL/LSmitll_NOTT.gds"
 	LSmitll_XORT   = 	"data/LSMITLL/LSmitll_XORT.gds"
+
+[GDS_CELL_SIZES]
+	"LSmitll_NOTT"   = [70, 50]
+	"LSmitll_DFFT"   = [60, 50]
+	"LSmitll_jtlt"   = [40, 50]
+	"LSmitll_SPLITT" = [40, 50]
+	"LSmitll_MERGET" = [40, 50]
+	"LSmitll_AND2T"  = [70, 50]
+	"LSmitll_XORT"   = [70, 50]
+	"LSmitll_OR2T"   = [70, 50]
+	# "LSmitll_NDROT = []"
+	"PAD"            = [30, 30]
+	"SPLITCLK0"      = [30, 40]
+	"SPLITCLK1"      = [30, 40]
+	"SPLITCLK2"      = [30, 40]
+	"SPLITCLK3"      = [30, 40]
+	"SPLITCLK4"      = [30, 40]
+	"SPLITCLK5"      = [30, 40]
+	"SPLITCLK6"      = [30, 40]
+	"SPLITCLK7"      = [30, 40]
+
 
 # The name of the GDS structure of which the gate type belongs to
 [GDS_MAIN_STR_NAME]

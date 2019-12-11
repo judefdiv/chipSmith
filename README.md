@@ -46,6 +46,14 @@ Examples of how to execute chipForge:
 
 ## Notes
 
+Routing connection to the pin must be a PTL on layer M3 with M2 and M4 as shielding groundplanes.
+
+M0 - 1  -- shield
+M1 - 10 -- track
+M2 - 20 -- shield
+M3 - 30 -- track
+M4 - 40 -- shield
+
 For IARPA contract SuperTools
 
 LEF: Library Exchange Format
