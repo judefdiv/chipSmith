@@ -47,6 +47,10 @@ class forgedChip{
     vector<vector<vector<bool>>> grid;
     // grid[0] - All; grid[n] - Mn;
 
+    // fill area, must rename variables
+    bool fillEnable = true;
+    int gridShiftX = 0;
+    int gridShiftY = 0;
     int gridOffsetX = 0;
     int gridOffsetY = 0;
     int gridSizeX = 0;

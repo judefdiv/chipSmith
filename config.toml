@@ -7,13 +7,21 @@
 # Description: Configuration file for defining stuffs
 # File:				 config.toml
 
-[CONFIG]
-	LEFfile = "data/LEFDEFSUN/lef_2_metals.lef"
-	DEFfile = "data/LEFDEFSUN/KSA4_route.def"
-	GDSfile = "data/outputGDS.gds"
+[File_Location]
+	# LEFfile = "data/LEFDEFSUN/lef_2_metals.lef"
+	# DEFfile = "data/LEFDEFSUN/KSA4_route.def"
+	# GDSfile = "data/outputGDS.gds"
+
+	LEFfile = "data/ViPeR/SUN.lef"
+	DEFfile = "data/ViPeR/rca2.def"
+	GDSfile = "data/ViPeR/outputGDS.gds"
 
 [PARAMETERS]
-	fillCor = [55, 55, 1045, 1805]
+	fill = "Y" # Fill or not to fill: "Y" - yes; "N" - no;
+	fillCor = [0, 0, 300, 600]   # Fill area, coordinates - [x_1, y_1, x_2, y_2]
+	# fillCor = [55, 55, 1045, 1805]
+	gridOffsetX = -15
+	girdOffsetY = -15
 	gridSize = 10
 
 [GDS_LOCATIONS]
@@ -39,45 +47,56 @@
 	LSmitll_NOTT   = 	"data/LSMITLL/LSmitll_NOTT.gds"
 	LSmitll_XORT   = 	"data/LSMITLL/LSmitll_XORT.gds"
 
-[GDS_CELL_SIZES]
-	"LSmitll_NOTT"   = [70, 50]
-	"LSmitll_DFFT"   = [60, 50]
-	"LSmitll_jtlt"   = [40, 50]
-	"LSmitll_SPLITT" = [40, 50]
-	"LSmitll_MERGET" = [40, 50]
-	"LSmitll_AND2T"  = [70, 50]
-	"LSmitll_XORT"   = [70, 50]
-	"LSmitll_OR2T"   = [70, 50]
-	# "LSmitll_NDROT = []"
-	"PAD"            = [30, 30]
-	"SPLITCLK0"      = [30, 40]
-	"SPLITCLK1"      = [30, 40]
-	"SPLITCLK2"      = [30, 40]
-	"SPLITCLK3"      = [30, 40]
-	"SPLITCLK4"      = [30, 40]
-	"SPLITCLK5"      = [30, 40]
-	"SPLITCLK6"      = [30, 40]
-	"SPLITCLK7"      = [30, 40]
-
+# [GDS_CELL_SIZES] # CLEAN UP (REMOVE)
+# 	"LSmitll_NOTT"   = [70, 50]
+# 	"LSmitll_DFFT"   = [60, 50]
+# 	"LSmitll_jtlt"   = [40, 50]
+# 	"LSmitll_SPLITT" = [40, 50]
+# 	"LSmitll_MERGET" = [40, 50]
+# 	"LSmitll_AND2T"  = [70, 50]
+# 	"LSmitll_XORT"   = [70, 50]
+# 	"LSmitll_OR2T"   = [70, 50]
+# 	# "LSmitll_NDROT = []"
+# 	"PAD"            = [30, 30]
+# 	"SPLITCLK0"      = [30, 40]
+# 	"SPLITCLK1"      = [30, 40]
+# 	"SPLITCLK2"      = [30, 40]
+# 	"SPLITCLK3"      = [30, 40]
+# 	"SPLITCLK4"      = [30, 40]
+# 	"SPLITCLK5"      = [30, 40]
+# 	"SPLITCLK6"      = [30, 40]
+# 	"SPLITCLK7"      = [30, 40]
 
 # The name of the GDS structure of which the gate type belongs to
-[GDS_MAIN_STR_NAME]
+[GDS_MAIN_STR_NAME] # ViPeR circuits
 	NOTT      = "LSmitll_NOTT"
-	DFFT      = "LSmitll_DFFT"
+	DFF       = "LSmitll_DFFT"
 	JTLT      = "LSmitll_jtlt"
-	SPLITT    = "LSmitll_SPLITT"
+	SPLIT     = "LSmitll_SPLITT"
 	MERGET    = "LSmitll_MERGET"
 	AND2T     = "LSmitll_AND2T"
 	XOR2T     = "LSmitll_XORT"
 	OR2T      = "LSmitll_OR2T"
 	NDRO      = "LSmitll_NDROT"
-
 	PAD       = "PAD"
-	SPLITCLK0 = "SPLITCLK0"
-	SPLITCLK1 = "SPLITCLK1"
-	SPLITCLK2 = "SPLITCLK2"
-	SPLITCLK3 = "SPLITCLK3"
-	SPLITCLK4 = "SPLITCLK4"
-	SPLITCLK5 = "SPLITCLK5"
-	SPLITCLK6 = "SPLITCLK6"
-	SPLITCLK7 = "SPLITCLK7"
+
+# [GDS_MAIN_STR_NAME] # USC circuits
+# 	NOTT      = "LSmitll_NOTT"
+# 	DFFT      = "LSmitll_DFFT"
+# 	JTLT      = "LSmitll_jtlt"
+# 	SPLITT    = "LSmitll_SPLITT"
+# 	MERGET    = "LSmitll_MERGET"
+# 	AND2T     = "LSmitll_AND2T"
+# 	XOR2T     = "LSmitll_XORT"
+# 	OR2T      = "LSmitll_OR2T"
+# 	NDRO      = "LSmitll_NDROT"
+
+# 	PAD       = "PAD"
+# 	SPLITCLK0 = "SPLITCLK0"
+# 	SPLITCLK1 = "SPLITCLK1"
+# 	SPLITCLK2 = "SPLITCLK2"
+# 	SPLITCLK3 = "SPLITCLK3"
+# 	SPLITCLK4 = "SPLITCLK4"
+# 	SPLITCLK5 = "SPLITCLK5"
+# 	SPLITCLK6 = "SPLITCLK6"
+# 	SPLITCLK7 = "SPLITCLK7"

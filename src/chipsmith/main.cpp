@@ -127,7 +127,7 @@ int RunToolFromConfig(string fileName){
 	cout << "Importing execution parameters from config.toml" << endl;
 
 	const auto mainConfig  = toml::parse(fileName);
-	map<string, string> run_para = toml::get<map<string, string>>(mainConfig.at("CONFIG"));
+	map<string, string> run_para = toml::get<map<string, string>>(mainConfig.at("File_Location"));
 
 	map<string, string>::iterator it_run_para;
 

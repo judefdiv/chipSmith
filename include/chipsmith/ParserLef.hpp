@@ -78,7 +78,6 @@ struct macro_pin{
 	string name = "\0";
 	string direction = "\0";
 	vector<macro_port> ports;
-
 };
 
 class lef_macro{

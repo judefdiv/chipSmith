@@ -60,38 +60,69 @@ int forgedChip::importData(const string &lefFileName, const string &defFileName,
 
   const auto &Para = toml::find(mainConfig, "PARAMETERS");
 
-  auto element = toml::find(Para, "fillCor");
+  auto element = toml::find(Para, "fill");
+  string gridToBe = toml::get<string>(element);
+  if(!gridToBe.compare("Y")){
+    this->fillEnable = true;
+  }
+  else if(!gridToBe.compare("N")){
+    this->fillEnable = false;
+  }
+  else{
+    cout << "Warning, \"" << gridToBe << "\" is not valid. There shall be no fill." << endl;
+    this->fillEnable = false;
+  }
+
+  element = toml::find(Para, "gridOffsetX");
+  this->gridShiftX = toml::get<int>(element);
+
+  element = toml::find(Para, "girdOffsetY");
+  this->gridShiftY = toml::get<int>(element);
+
+  element = toml::find(Para, "fillCor");
   this->fillCor = toml::get<vector<int>>(element);
 
   element   = toml::find(Para, "gridSize");
   this->gridSize    = toml::get<int>(element);
 
-  this->gridOffsetX = this->fillCor[0];
-  this->gridOffsetY = this->fillCor[1];
+  // this->gridOffsetX = this->fillCor[0];
+  // this->gridOffsetY = this->fillCor[1];
+
+  this->gridOffsetX = this->fillCor[0] + this->gridShiftX;
+  this->gridOffsetY = this->fillCor[1] + this->gridShiftY;
 
   this->gridSizeX = (fillCor[2] - fillCor[0])/this->gridSize;
   this->gridSizeY = (fillCor[3] - fillCor[1])/this->gridSize;
 
   cout << "Grid size: " << this->gridSizeX << "x" << this->gridSizeY << endl;
 
+  cout << "Defining grid." << endl;
+
   vector<bool> yFill;
   yFill.resize(this->gridSizeY, true);
-
-  cout << "Defining grid." << endl;
 
   this->grid.resize(7);
 
   for(auto &foo: this->grid){
     foo.resize(this->gridSizeX, yFill);
   }
+
   cout << "Defining grid, done." << endl;
 
   /***************************************************************************
    ******************************* Cell Size *********************************
    ***************************************************************************/
 
-  this->cellSize = toml::get<map<string, vector<int>>>(mainConfig.at("GDS_CELL_SIZES"));
+  // this->cellSize = toml::get<map<string, vector<int>>>(mainConfig.at("GDS_CELL_SIZES"));
 
+  for(auto const &itMac: this->lefFile.macros){
+    this->cellSize.insert(pair<string,vector<int>>(itMac.name, {(int)itMac.sizeX, (int)itMac.sizeY}));
+  }
+
+  cout << "Sneak peak into cellSize" << endl;
+  for(auto const& [key, val]: this->cellSize){
+    cout << key << ":" << val[0] << "," << val[1] << endl;
+  }
 
   cout << "Importing data, done." << endl;
   return 0;
@@ -108,16 +139,18 @@ int forgedChip::genGDS(const string &gdsFileName){
   gdsSTR GDSmainSTR;
 
   this->importGates();
+  // if(this->fillEnable) this->importFill();
   this->importFill();
   this->placeGates();
   this->placeNets();
-  placeFill();
+  if(this->fillEnable) this->placeFill();
 
   GDSmainSTR.name = "chipSmith";
   GDSmainSTR.SREF.push_back(drawSREF("Components", 0, 0));
   GDSmainSTR.SREF.push_back(drawSREF("Nets", 0, 0));
   GDSmainSTR.SREF.push_back(drawSREF("Vias", 0, 0));
-  GDSmainSTR.SREF.push_back(drawSREF("Fill", 0, 0));
+  if(this->fillEnable) GDSmainSTR.SREF.push_back(drawSREF("Fill", -this->gridShiftX, -this->gridShiftY));
+  if(this->fillEnable) GDSmainSTR.SREF.push_back(drawSREF("Fill", 0, 0));
 
   gdsFile.setSTR(GDSmainSTR);
   gdsFile.write(gdsFileName);
@@ -155,6 +188,7 @@ int forgedChip::placeGates(){
  */
 
 int forgedChip::placeFill(){
+  cout << "Placing fill." << endl;
   gdsSTR GDSfill;
   vector<gdsSTR> GDSfil;
   GDSfill.name = "Fill";
@@ -168,6 +202,8 @@ int forgedChip::placeFill(){
   /*
    * Fill the whole circuit
    */
+
+  cout << "\tFilling the whole circuit." << endl;
 
   GDSfil[0].name = "FillAll";
   GDSfill.SREF.push_back(drawSREF("FillAll", 0, 0));
@@ -187,25 +223,27 @@ int forgedChip::placeFill(){
    * Fill where there are no cells
    */
 
+  cout << "\tFilling M4 & M6, no gates." << endl;
+
   GDSfil[4].name = "FillM4";
   GDSfil[6].name = "FillM6";
   GDSfill.SREF.push_back(drawSREF("FillM4", 0, 0));
   GDSfill.SREF.push_back(drawSREF("FillM6", 0, 0));
 
   for(const auto &comps: defFile.comps){
-    if(!comps.compName.compare("PAD")){
-      continue;
-    }
 
     int x_lower_limit = (comps.corX * 10) - (gridOffsetX *1000);
     int y_lower_limit = (comps.corY * 10) - (gridOffsetY *1000);
-    int x_upper_limit = (comps.corX * 10) - (gridOffsetX *1000) + (this->cellSize[this->lef2gdsNames[comps.compName]][0] *1000);
-    int y_upper_limit = (comps.corY * 10) - (gridOffsetY *1000) + (this->cellSize[this->lef2gdsNames[comps.compName]][1] *1000);
+    int x_upper_limit = (comps.corX * 10) - (gridOffsetX *1000) + (this->cellSize[comps.compName][0] *1000);
+    int y_upper_limit = (comps.corY * 10) - (gridOffsetY *1000) + (this->cellSize[comps.compName][1] *1000);
 
     x_lower_limit /= 10000;
     y_lower_limit /= 10000;
     x_upper_limit /= 10000;
     y_upper_limit /= 10000;
+
+    // cout << "x_1,y_1 = " << x_lower_limit << "," <<  y_lower_limit << endl;
+    // cout << "x_2,y_2 = " << x_upper_limit << "," <<  y_upper_limit << endl;
 
     for(unsigned int i = x_lower_limit; i < x_upper_limit; i++){
       for(unsigned int j = y_lower_limit; j < y_upper_limit; j++){
@@ -213,6 +251,7 @@ int forgedChip::placeFill(){
         this->grid[6][i][j] = false;
       }
     }
+
   }
 
   /***************************************************************************
@@ -222,7 +261,7 @@ int forgedChip::placeFill(){
    * Fill where there are no vias
    */
 
-  cout << "Creating fill for Vias." << endl;
+  cout << "\tFilling M2, no vias." << endl;
 
   GDSfil[2].name = "FillM2";
   GDSfill.SREF.push_back(drawSREF("FillM2", 0, 0));
@@ -248,7 +287,7 @@ int forgedChip::placeFill(){
    * Fill where there is no routing
    */
 
-  cout << "Creating fill for Nets." << endl;
+  cout << "\tFilling M1 & M3, no tracks." << endl;
 
   GDSfil[1].name = "FillM1";
   GDSfil[3].name = "FillM3";
@@ -281,19 +320,19 @@ int forgedChip::placeFill(){
         corYfrom  /= 10000;
         corYto    /= 10000;
 
-        if(corYfrom < 0)
-          corYfrom = 0;
-        if(corYto < 0)
-          corYto = 0;
-        if(corXfrom < 0)
-          corXfrom = 0;
-        if(corXto < 0)
-          corXto = 0;
+        // if(corYfrom < 0)
+        //   corYfrom = 0;
+        // if(corYto < 0)
+        //   corYto = 0;
+        // if(corXfrom < 0)
+        //   corXfrom = 0;
+        // if(corXto < 0)
+        //   corXto = 0;
 
-        if(gridSizeX <= corXfrom || gridSizeX <= corXto || gridSizeY <= corYfrom || gridSizeY <= corYto){
-          // cout << "skipping" << endl;
-          continue;
-        }
+        // if(gridSizeX <= corXfrom || gridSizeX <= corXto || gridSizeY <= corYfrom || gridSizeY <= corYto){
+        //   // cout << "skipping" << endl;
+        //   continue;
+        // }
 
         // cout << "x:" << corXfrom << " -> " << corXto << endl;
         // cout << "Y:" << corYfrom << " -> " << corYto << endl;
@@ -328,11 +367,11 @@ int forgedChip::placeFill(){
     }
   }
 
-  cout << "Creating fill for Nets, done." << endl;
-
   /***************************************************************************
    ******************************* Fill others *******************************
    ***************************************************************************/
+
+  cout << "\tFilling M5?" << endl;
 
   GDSfil[5].name = "FillM5";
   GDSfill.SREF.push_back(drawSREF("FillM5", 0, 0));
@@ -356,6 +395,8 @@ int forgedChip::placeFill(){
 
   gdsFile.setSTR(GDSfill);
   gdsFile.setSTR(GDSfil);
+
+  cout << "Placing fill, done." << endl;
 
   return 0;
 }
