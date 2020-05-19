@@ -22,18 +22,9 @@
 
 int forgeChip(const string &lefFileName, const string &defFileName, const string &gdsFileName, const string &conFileName){
 
-  cout << "You are wishing that you made a chip" << endl;
-  // lef_file lefFile;
-  // lefFile.importFile(lefFileName);
-  // lefFile.to_str();
-
-  // def_file deffile;
-  // deffile.importFile(defFileName);
-  // deffile.to_str();
-
-  forgedChip gdsChip;
+  chipSmith gdsChip;
   gdsChip.importData(lefFileName, defFileName, conFileName);
-  gdsChip.genGDS(gdsFileName);
+  gdsChip.toGDS(gdsFileName);
 
   return 0;
 }

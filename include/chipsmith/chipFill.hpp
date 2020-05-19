@@ -2,40 +2,39 @@
  * Author:      Jude de Villiers
  * Origin:      E&E Engineering - Stellenbosch University
  * For:         Supertools, Coldflux Project - IARPA
- * Created:     2019-12-02
+ * Created:     2020-04-21
  * Modified:
  * license:
- * Description: Creates the GDS chip
- * File:        chipForge.hpp
+ * Description: Creates and populates the GDS chip
+ * File:        chipFill.hpp
  */
 
-#ifndef chipforge
-#define chipforge
-
-class def_component;
-class def_net;
+#ifndef chipfill
+#define chipfill
 
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <iostream>
+#include <cmath>
 #include "toml/toml.hpp"
 #include "chipsmith/ParserLef.hpp"
 #include "chipsmith/ParserDef.hpp"
 #include "gdscpp/gdsCpp.hpp"
 
-
 using namespace std;
 
+int constrain(int inVal, int lowerLimit, int upperLimit);
 
-class forgedChip{
+class chipSmith{
   private:
     string name;
 
     lef_file lefFile;
     def_file defFile;
 
-    gdscpp gdsFile;
+    gdscpp gdsF;
 
     vector<string> usedGates;
 
@@ -43,38 +42,39 @@ class forgedChip{
     map<string, string> lef2gdsNames;
     map<string, string> gdsFillFileLoc;
 
-    map<string, vector<int>> cellSize;
+    // map<string, vector<int>> cellSize;
     vector<vector<vector<bool>>> grid;
-    // grid[0] - All; grid[n] - Mn;
+    // grid[0] - All; grid[n] - M_n;
 
-    // fill area, must rename variables
     bool fillEnable = true;
-    int gridShiftX = 0;
-    int gridShiftY = 0;
-    int gridOffsetX = 0;
-    int gridOffsetY = 0;
-    int gridSizeX = 0;
-    int gridSizeY = 0;
-
-
+    unsigned int gateHeight = 0;
+    float PTLwidth = 0;
     vector<int> fillCor;
     unsigned int gridSize = 0;
+    map<string, int> GateBiasCorX;
+
+    // Grid limits (size of the grid)
+    unsigned int gridLX = 0;
+    unsigned int gridLY = 0;
+
+    map<string, vector<int>> cellSizes;
 
     int importGates();
     int importFill();
     int placeGates();
     int placeNets();
     int placeFill();
+    int placeBias();
 
   public:
-    forgedChip(){};
-    ~forgedChip(){};
+    chipSmith(){};
+    ~chipSmith(){};
 
     int importData(const string &lefFileName,
                    const string &defFileName,
                    const string &conFileName);
 
-    int genGDS(const string &gdsFileName);
+    int toGDS(const string &gdsFileName);
 };
 
 #endif

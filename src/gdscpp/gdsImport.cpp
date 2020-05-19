@@ -690,7 +690,7 @@ int gdscpp::import(string fileName)
       {"\0", 1000000000}); // Add null character to structure map with index 1
                            // billion. Unlikely to be 1 billion structures
   delete[] current_readBlk;
-  resolve_heirarchy_and_bounding_boxes();
+  // resolve_heirarchy_and_bounding_boxes();
   cout << "GDS file successfully imported." << endl;
   return 0;
 }
@@ -951,14 +951,19 @@ int gdscpp::calculate_STR_bounding_box(int structure_index, int *destination)
 
     if ((referred_bound_box[0] == 0) && (referred_bound_box[1] == 0) &&
         (referred_bound_box[2] == 0) && (referred_bound_box[3] == 0)) {
-      cout << "Warning: Structure being referenced does not have an initialized"
-           << endl;
-      cout << "bounding box. Therefore, bounding boxes of references will be "
-              "inaccurate."
-           << endl;
-      cout << "Calculate bounding boxes from the lowest level (unreferenced) "
-              "upwards."
-           << endl;
+      // cout << "Warning: Structure being referenced does not have an
+      // initialized"
+      //      << endl;
+      // cout << "bounding box. Therefore, bounding boxes of references will be
+      // "
+      //         "inaccurate."
+      //      << endl;
+      // cout << "Calculate bounding boxes from the lowest level (unreferenced)
+      // "
+      //         "upwards."
+      //      << endl;
+      // cout << "Warning: Inaccuracy due to structures not being initialized."
+      //      << endl;
     }
     if (SREF_iter->reflection == true) // Reflect about x-axis
     {
@@ -1050,15 +1055,15 @@ int gdscpp::calculate_STR_bounding_box(int structure_index, int *destination)
                                    STR[target_structure_index].bounding_box[3]};
     if ((a_referred_bound_box[0] == 0) && (a_referred_bound_box[1] == 0) &&
         (a_referred_bound_box[2] == 0) && (a_referred_bound_box[3] == 0)) {
-      cout << "Warning: Structure being referenced for AREF does not have an "
-              "initialized"
-           << endl;
-      cout << "bounding box. Therefore, bounding boxes of references will be "
-              "inaccurate."
-           << endl;
-      cout << "Calculate bounding boxes from the lowest level (unreferenced) "
-              "upwards."
-           << endl;
+      // cout << "Warning: Structure being referenced for AREF does not have an "
+      //         "initialized"
+      //      << endl;
+      // cout << "bounding box. Therefore, bounding boxes of references will be "
+      //         "inaccurate."
+      //      << endl;
+      // cout << "Calculate bounding boxes from the lowest level (unreferenced) "
+      //         "upwards."
+      //      << endl;
     }
     // Rotate array reference back to original dimensions
     POINT cor, corRow, corCol, true_max;

@@ -1,5 +1,11 @@
-cmake_minimum_required(VERSION 2.6)
-project(chipSmith)
+cmake_minimum_required(VERSION 3.13.0)
+
+project(chipSmith VERSION 0.9)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 
 set(SOURCES
   # chipSmith
@@ -8,7 +14,7 @@ set(SOURCES
   src/chipsmith/genFunc.cpp
   src/chipsmith/ParserLef.cpp
   src/chipsmith/ParserDef.cpp
-  src/chipsmith/chipForge.cpp
+  src/chipsmith/chipFill.cpp
 
   # GDScpp library
   src/gdscpp/gdsCpp.cpp
@@ -23,4 +29,3 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PRIVATE
   ${PROJECT_SOURCE_DIR}/include
 )
-
