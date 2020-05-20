@@ -234,40 +234,9 @@ int chipSmith::placeFill(){
   gdsSTR GDSfill;
   GDSfill.name = "Fill";
 
-  const vector<string> gdsFillName = {"fillAll", "fillM1", "fillM2", "fillM3", "fillM4", "fillM5", "fillM6"};
+  const vector<string> gdsFillName = {"fillAll", "fillM1", "fillM2", "fillM3", "fillM4", "fillM5via", "fillM6"};
   vector<gdsSTR> GDSfil;
   GDSfil.resize(gdsFillName.size());
-
-
-  /**
-   * Calculating the size of all the gates/cells/structures
-   */
-
-  // vector<int> foo;
-  // foo.resize(4);
-  // int bar[4];
-
-  // for(unsigned int i = 0; i < this->gdsF.STR.size(); i++){
-  //   for(const auto &itGates: usedGates){
-  //     if(!this->gdsF.STR[i].name.compare(this->lef2gdsNames[itGates])){
-  //       this->gdsF.calculate_STR_bounding_box(i, bar);
-
-  //       for(unsigned int j = 0; j < 4; j++){
-  //         foo[j] = bar[j];
-  //       }
-
-  //       this->cellSizes.insert(pair<string, vector<int>>(this->lef2gdsNames[itGates], foo));
-  //       break;
-  //     }
-  //   }
-  // }
-
-
-  // cout << "Cell bounding boxes:" << endl;
-  // for(auto const& [key, value]: this->cellSizes){
-  //   cout << "  " << key << ": " << value[0] << ", " << value[1] << "; " << value[2] << ", " << value[3] << endl;
-  // }
-
 
   /***************************************************************************
    ******************************* Fill All **********************************
@@ -448,10 +417,10 @@ int chipSmith::placeFill(){
       if(x_0 == x_1){
         //vertical
 
-        if((x_0 <= 0) || (x_0 >= gridLX)){
+        if((x_0 < 0) || (x_0 >= gridLX)){
           continue;
         }
-        else if((y_0 <= 0 && y_1 <= 0) || (y_0 >= gridLY && y_1 >= gridLY)){  // if route is off grid
+        else if((y_0 < 0 && y_1 < 0) || (y_0 >= gridLY && y_1 >= gridLY)){  // if route is off grid
           continue;
         }
 
@@ -472,10 +441,10 @@ int chipSmith::placeFill(){
       else if(y_0 == y_1){
         //horizontal
 
-        if((y_0 <= 0) || (y_0 >= gridLY)){
+        if((y_0 < 0) || (y_0 >= gridLY)){
           continue;
         }
-        else if((x_0 <= 0 && x_1 <= 0) || (x_0 >= gridLX && x_1 >= gridLX)){  // if route is off grid
+        else if((x_0 < 0 && x_1 < 0) || (x_0 >= gridLX && x_1 >= gridLX)){  // if route is off grid
           continue;
         }
 
@@ -505,10 +474,124 @@ int chipSmith::placeFill(){
    ******************************* Fill others *******************************
    ***************************************************************************/
 
-  cout << "Filling M5?" << endl;
+  cout << "Filling M5, around gates and biasing tracks." << endl;
 
   GDSfil[5].name = "FillM5";
   GDSfill.SREF.push_back(drawSREF("FillM5", 0, 0));
+
+  /**
+   * Modifying the grid
+   */
+
+  for(const auto &comps: this->gdsF.STR[compIndex].SREF){
+
+    // cout << "N: " << comps.name << " " << comps.xCor << ", " << comps.yCor << endl;
+
+    int x_0 = (comps.xCor) - (fillCor[0] *1000) + (this->cellSizes[comps.name][0]);
+    int y_0 = (comps.yCor) - (fillCor[1] *1000) + (this->cellSizes[comps.name][1]);
+    int x_1 = (comps.xCor) - (fillCor[0] *1000) + (this->cellSizes[comps.name][2]);
+    int y_1 = (comps.yCor) - (fillCor[1] *1000) + (this->cellSizes[comps.name][3]);
+
+    // cout << "x_1, y_1; x_2, y_2: " << x_0 << ", " <<  y_0 << "; "<< x_1 << ", " <<  y_1 << endl;
+
+    x_0 = constrain(x_0 / 10000, 0, gridLX);
+    y_0 = constrain(y_0 / 10000, 0, gridLY);
+    x_1 = constrain(x_1 / 10000, 0, gridLX);
+    y_1 = constrain(y_1 / 10000, 0, gridLY);
+
+    for(unsigned int i = x_0; i < x_1; i++){
+      for(unsigned int j = y_0; j < y_1; j++){
+        this->grid[5][i][j] = false;
+      }
+    }
+  }
+
+  /**
+   * Find the index of the Biases in STR vector
+   */
+
+  unsigned int biasIndex;
+  for(biasIndex = 0; biasIndex < this->gdsF.STR.size(); biasIndex++){
+    if(!this->gdsF.STR[biasIndex].name.compare("Biases")){
+      break;
+    }
+  }
+
+  /**
+   * Modifying the grid
+   */
+
+  for(const auto &path: this->gdsF.STR[biasIndex].PATH){
+
+    for(unsigned int i = 0; i < path.xCor.size() -1; i++){
+
+      int x_0 = (path.xCor[i]) - (fillCor[0] *1000);
+      int y_0 = (path.yCor[i]) - (fillCor[1] *1000);
+      int x_1 = (path.xCor[i+1]) - (fillCor[0] *1000);
+      int y_1 = (path.yCor[i+1]) - (fillCor[1] *1000);
+
+      // cout << "[" << path.layer/10 << "]: " << x_0 << ", " <<  y_0 << "; "<< x_1 << ", " <<  y_1 << endl;
+
+      x_0 /= 10000;
+      y_0 /= 10000;
+      x_1 /= 10000;
+      y_1 /= 10000;
+
+      if(x_0 == x_1){
+        //vertical
+
+        if((x_0 < 0) || (x_0 >= gridLX)){
+          continue;
+        }
+        else if((y_0 < 0 && y_1 < 0) || (y_0 >= gridLY && y_1 >= gridLY)){  // if route is off grid
+          continue;
+        }
+
+        y_0 = constrain(y_0, 0, gridLY-1);
+        y_1 = constrain(y_1, 0, gridLY-1);
+
+        if(y_1 > y_0){
+          for(int j = y_0; j <= y_1; j++){
+            this->grid[5][x_0][j] = false;
+          }
+        }
+        else{
+          for(int j = y_0; j >= y_1; j--){
+            this->grid[5][x_0][j] = false;
+          }
+        }
+      }
+      else if(y_0 == y_1){
+        //horizontal
+
+        if((y_0 < 0) || (y_0 >= gridLY)){
+          continue;
+        }
+        else if((x_0 < 0 && x_1 < 0) || (x_0 >= gridLX && x_1 >= gridLX)){  // if route is off grid
+          continue;
+        }
+
+        x_0 = constrain(x_0, 0, gridLX-1);
+        x_1 = constrain(x_1, 0, gridLX-1);
+
+        if(x_1 > x_0){
+          for(int j = x_0; j <= x_1; j++){
+            this->grid[5][j][y_0] = false;
+          }
+        }
+        else{
+          for(int j = x_0; j >= x_1; j--){
+            this->grid[5][j][y_0] = false;
+          }
+        }
+      }
+      else{
+        cout << "Error: Non Manhattan routes..." << endl;
+      }
+    }
+  }
+
+  cout << "Filling M5, around gates and biasing tracks, done." << endl;
 
   /***************************************************************************
    ******************************* Plot Grid *********************************
@@ -517,9 +600,6 @@ int chipSmith::placeFill(){
   for(unsigned int i = 0; i < grid.size(); i++){
     for(unsigned int x = 0; x < grid[i].size(); x++){
       for(unsigned int y = 0; y < grid[i][x].size(); y++){
-        if(i == 5){
-          continue;
-        }
         if(this->grid[i][x][y] == true){
           GDSfil[i].SREF.push_back(drawSREF(gdsFillName[i], (fillCor[0] * 1000) + (x*10000), (fillCor[1] * 1000) + (y*10000)));
         }
@@ -646,6 +726,9 @@ int chipSmith::placeBias(){
    ***************************************************************************/
 
   for(const auto &itSTR: this->gdsF.STR[compIndex].SREF){
+    if(!itSTR.name.compare("PAD")){
+      continue;
+    }
     corX.clear();
     corY.clear();
     corX.push_back(itSTR.xCor + (this->GateBiasCorX[itSTR.name] * 1000));
@@ -750,7 +833,7 @@ int chipSmith::importGates(){
         this->gdsF.calculate_STR_bounding_box(i, bar);
 
         for(unsigned int j = 0; j < 4; j++){
-          foo[j] = bar[j];
+          foo[j] = round(((float)bar[j])/10000)*10000;
         }
 
         this->cellSizes.insert(pair<string, vector<int>>(this->lef2gdsNames[itGates], foo));

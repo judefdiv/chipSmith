@@ -20,7 +20,7 @@
 	fill = true # Fill or not to fill
 	# fillCor = [-5, -5, 620, 1190]   # Fill area, coordinates - [x_1, y_1, x_2, y_2]
 	# fillCor = [15, 15, 600, 1160]
-	fillCor = [-5, 5, 760, 1810]
+	fillCor = [-5, 5, 780, 1810]
 	gridSize = 10
 	gateHeights = 70
 	PTLwidth = 4.5
