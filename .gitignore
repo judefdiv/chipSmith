@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+*.sublime-project
+*.sublime-workspace
+
+# Hidden files
+.*
+!.gitignore
+
+# Folders
+build/
+data/

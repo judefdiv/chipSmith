@@ -1,0 +1,114 @@
+# Author:  		 Jude de Villiers
+# Origin:  		 E&E Engineering - Stellenbosch University
+# For:				 Supertools, Coldflux Project - IARPA
+# Created: 		 2019-11-27
+# Modified:
+# license:
+# Description: Configuration file for defining stuffs
+# File:				 config.toml
+
+[File_Location]
+	# LEFfile = "data/LEFDEFSUN/lef_2_metals.lef"
+	# DEFfile = "data/LEFDEFSUN/KSA4_v1p5_route.def"
+	# GDSfile = "data/outputGDS.gds"
+
+	LEFfile = "data/ViPeR/SUN.lef"
+	DEFfile = "data/ViPeR/KSA4_v1p5_route.def"
+	GDSfile = "data/ViPeR/KSA4_v1p5_SUN.gds"
+
+[Parameters]
+	fill = true # Fill or not to fill
+	# fillCor = [-5, -5, 620, 1190]   # Fill area, coordinates - [x_1, y_1, x_2, y_2]
+	# fillCor = [15, 15, 600, 1160]
+	fillCor = [-5, 5, 780, 1810]
+	gridSize = 10
+	gateHeights = 70
+	PTLwidth = 4.5
+
+[Biasing_Coordinate]
+  LSmitll_AND2T_v1p5  = 95
+  LSmitll_MERGET_v1p5 = 65
+  LSmitll_OR2T_v1p5   = 85
+  LSmitll_DFFT_v1p5   = 65
+  LSmitll_NDROT_v1p5  = 115
+  LSmitll_SPLITT_v1p5 = 45
+  LSmitll_JTLT_v1p5   = 35
+  LSmitll_NOTT_v1p5   = 95
+  LSmitll_XORT_v1p5   = 95
+
+[GDS_LOCATIONS]
+	fillAll = "data/GDSfill/fillAll.gds"
+	fillM1 = "data/GDSfill/fillM1.gds"
+	fillM2 = "data/GDSfill/fillM2.gds"
+	fillM3 = "data/GDSfill/fillM3.gds"
+	fillM4 = "data/GDSfill/fillM4.gds"
+	fillM5 = "data/GDSfill/fillM5via.gds"
+	fillM6 = "data/GDSfill/fillM6.gds"
+	ViaM1M3 = "data/GDSfill/ViaM1M3.gds"
+
+# The file locations of the GDS cell library
+[GDS_CELL_LOCATIONS]
+  # LSmitll_AND2T  =  "data/LSMITLL/LSmitll_AND2T.gds"
+  # LSmitll_MERGET =  "data/LSMITLL/LSmitll_MERGET.gds"
+  # LSmitll_OR2T   =  "data/LSMITLL/LSmitll_OR2T.gds"
+  # LSmitll_DFFT   =  "data/LSMITLL/LSmitll_DFFT.gds"
+  # LSmitll_NDROT  =  "data/LSMITLL/LSmitll_NDROT.gds"
+  # LSmitll_SPLITT =  "data/LSMITLL/LSmitll_SPLITT.gds"
+  # LSmitll_jtlt   =  "data/LSMITLL/LSmitll_jtlt.gds"
+  # LSmitll_NOTT   =  "data/LSMITLL/LSmitll_NOTT.gds"
+  # LSmitll_XORT   =  "data/LSMITLL/LSmitll_XORT.gds"
+
+  LSmitll_AND2T_v1p5  = "data/LSmitll_v1p5/LSmitll_AND2T.gds"
+  LSmitll_MERGET_v1p5 = "data/LSmitll_v1p5/LSmitll_MERGET.gds"
+  LSmitll_OR2T_v1p5   = "data/LSmitll_v1p5/LSmitll_OR2T.gds"
+  LSmitll_DFFT_v1p5   = "data/LSmitll_v1p5/LSmitll_DFFT.gds"
+  LSmitll_NDROT_v1p5  = "data/LSmitll_v1p5/LSmitll_NDROT.gds"
+  LSmitll_SPLITT_v1p5 = "data/LSmitll_v1p5/LSmitll_SPLITT.gds"
+  LSmitll_JTLT_v1p5   = "data/LSmitll_v1p5/LSmitll_jtlt.gds"
+  LSmitll_NOTT_v1p5   = "data/LSmitll_v1p5/LSmitll_NOTT.gds"
+  LSmitll_XORT_v1p5   = "data/LSmitll_v1p5/LSmitll_XORT.gds"
+
+# The name of the GDS structure of which the gate type belongs to
+[GDS_MAIN_STR_NAME] # ViPeR circuits
+	# NOTT      = "LSmitll_NOTT"
+	# DFF       = "LSmitll_DFFT"
+	# JTLT      = "LSmitll_jtlt"
+	# SPLIT     = "LSmitll_SPLITT"
+	# MERGET    = "LSmitll_MERGET"
+	# AND2T     = "LSmitll_AND2T"
+	# XOR2T     = "LSmitll_XORT"
+	# OR2T      = "LSmitll_OR2T"
+	# NDRO      = "LSmitll_NDROT"
+	# PAD       = "PAD"
+
+	NOTT      = "LSmitll_NOTT_v1p5"
+	DFF       = "LSmitll_DFFT_v1p5"
+	JTLT      = "LSmitll_JTLT_v1p5"
+	SPLIT     = "LSmitll_SPLITT_v1p5"
+	MERGET    = "LSmitll_MERGET_v1p5"
+	AND2T     = "LSmitll_AND2T_v1p5"
+	XOR2T     = "LSmitll_XORT_v1p5"
+	OR2T      = "LSmitll_OR2T_v1p5"
+	NDRO      = "LSmitll_NDROT_v1p5"
+	PAD       = "PAD"
+
+# [GDS_MAIN_STR_NAME] # USC circuits
+	# NOTT      = "LSmitll_NOTT"
+	# DFFT      = "LSmitll_DFFT"
+	# JTLT      = "LSmitll_jtlt"
+	# SPLITT    = "LSmitll_SPLITT"
+	# MERGET    = "LSmitll_MERGET"
+	# AND2T     = "LSmitll_AND2T"
+	# XOR2T     = "LSmitll_XORT"
+	# OR2T      = "LSmitll_OR2T"
+	# NDRO      = "LSmitll_NDROT"
+
+	# PAD       = "PAD"
+	# SPLITCLK0 = "SPLITCLK0"
+	# SPLITCLK1 = "SPLITCLK1"
+	# SPLITCLK2 = "SPLITCLK2"
+	# SPLITCLK3 = "SPLITCLK3"
+	# SPLITCLK4 = "SPLITCLK4"
+	# SPLITCLK5 = "SPLITCLK5"
+	# SPLITCLK6 = "SPLITCLK6"
+	# SPLITCLK7 = "SPLITCLK7"
